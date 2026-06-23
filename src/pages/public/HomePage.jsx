@@ -48,7 +48,7 @@ function HeroCountdown({ countdown }) {
 
 export default function HomePage() {
   const { event, loading: eventLoading } = useEvent()
-  const { participants, loading: partsLoading, total, pagado, totalCollected } = useParticipants()
+  const { participants, loading: partsLoading, total, pagado, confirmado, totalCollected } = useParticipants()
   const { products, loading: prodsLoading, totalCost } = useProducts()
   const countdown = useCountdown(event?.eventDate)
   const [name, setName] = useState('')
@@ -227,10 +227,10 @@ export default function HomePage() {
             className="mb-10"
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Productos
+              ¿Qué estás pagando con tu aporte?
             </h2>
             <p className="text-[#71717A] mt-2 text-sm">
-              {products.length} {products.length === 1 ? 'producto' : 'productos'} para la finca
+              {products.length} {products.length === 1 ? 'producto' : 'productos'} para la finca y la finca como tal.
             </p>
           </motion.div>
 
@@ -255,7 +255,11 @@ export default function HomePage() {
             Inscritos
           </h2>
           <p className="text-[#71717A] mt-2 text-sm">
-            {total} {total === 1 ? 'persona asistirá' : 'personas asistirán'} al evento
+            {total} {total === 1 ? 'persona pensada' : 'personas pensadas'} para el evento
+            <span className="mx-2 text-[#3F3F46]">|</span>
+            <span className="text-amber-400">{confirmado} confirmadas</span>
+            <span className="mx-2 text-[#3F3F46]">|</span>
+            <span className="text-[#34D399]">{pagado} ya pagaron</span>
           </p>
         </motion.div>
 
