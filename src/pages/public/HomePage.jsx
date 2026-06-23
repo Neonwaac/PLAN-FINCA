@@ -9,7 +9,9 @@ import ProductCard from '../../components/ProductCard'
 import ProgressBar from '../../components/ProgressBar'
 import Loader from '../../components/Loader'
 import PublicNavbar from '../../components/PublicNavbar'
-import heroBg from '../../assets/finca/hero.jpg'
+import heroBg from '../../assets/finca/hero.webp'
+import qrNequi from '../../assets/QR_NEQUI.png'
+import { PAYMENT_PER_PERSON } from '../../constants'
 
 function HeroCountdown({ countdown }) {
   const blocks = [
@@ -27,7 +29,8 @@ function HeroCountdown({ countdown }) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
-          className="relative flex flex-col items-center bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] rounded-xl sm:rounded-2xl px-3 sm:px-5 py-3 sm:py-4 min-w-[64px] sm:min-w-[88px]"
+          className="relative flex flex-col items-center bg-[#121214]/90 border border-[#27272A] rounded-xl sm:rounded-2xl px-3 sm:px-5 py-3 sm:py-4 min-w-[64px] sm:min-w-[88px]"
+          style={{ willChange: 'transform' }}
         >
           <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums tracking-tight">
             {String(b.value).padStart(2, '0')}
@@ -87,14 +90,14 @@ export default function HomePage() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <div
-            className="absolute inset-0 bg-[length:cover] bg-center bg-no-repeat scale-105"
+            className="absolute inset-0 bg-[length:cover] bg-center bg-no-repeat"
             style={{
               backgroundImage: `url(${heroBg})`,
+              willChange: 'transform',
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#09090B]/70 via-[#09090B]/50 to-[#09090B]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#09090B]/40 to-transparent" />
-          <div className="absolute inset-0 backdrop-blur-[2px]" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-5 text-center flex flex-col items-center gap-6 sm:gap-8 pt-20 pb-16">
@@ -301,7 +304,7 @@ export default function HomePage() {
       </section>
 
       {/* ===== REGISTRATION ===== */}
-      <section id="inscribirse" ref={formRef} className="relative z-10 max-w-4xl mx-auto px-5 pt-24 sm:pt-32 pb-32">
+      <section id="inscribirse" ref={formRef} className="relative z-10 max-w-4xl mx-auto px-5 pt-24 sm:pt-32 pb-12">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -336,6 +339,58 @@ export default function HomePage() {
                 {submitting ? 'Inscribiendo...' : 'Inscribirme'}
               </button>
             </form>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ===== PAYMENTS ===== */}
+      <section id="pagos" className="relative z-10 max-w-4xl mx-auto px-5 pt-10 sm:pt-12 pb-32">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-[#121214] border border-[#27272A] rounded-2xl p-6 sm:p-8"
+        >
+          <div className="max-w-lg mx-auto text-center space-y-6">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                Pagos
+              </h2>
+              <p className="text-sm text-[#71717A] mt-2">
+                La cuota por persona es de{' '}
+                <span className="font-semibold text-[#34D399]">
+                  ${PAYMENT_PER_PERSON.toLocaleString('es-CO')}
+                </span>
+              </p>
+            </div>
+
+            <div className="bg-[#1A1A1E] border border-[#27272A] rounded-xl p-5 space-y-4">
+              <div className="flex items-center justify-center gap-3">
+                <svg className="w-5 h-5 text-[#34D399]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+                </svg>
+                <span className="text-base font-medium text-white">Nequi</span>
+              </div>
+              <p className="text-2xl sm:text-3xl font-bold text-[#34D399] tracking-tight select-all">
+                312 390 3681
+              </p>
+            </div>
+
+            <div className="bg-[#1A1A1E] border border-[#27272A] rounded-xl p-5">
+              <p className="text-sm text-[#A1A1AA] mb-3">O escanea el código QR</p>
+              <div className="flex justify-center">
+                <img
+                  src={qrNequi}
+                  alt="QR Nequi"
+                  className="w-48 h-48 rounded-xl bg-white"
+                />
+              </div>
+            </div>
+
+            <p className="text-xs text-[#52525B]">
+              Una vez realizado el pago, el administrador lo confirmará en el sistema
+            </p>
           </div>
         </motion.div>
       </section>
