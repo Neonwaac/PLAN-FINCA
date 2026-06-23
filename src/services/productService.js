@@ -5,7 +5,6 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
-  serverTimestamp,
   query,
   orderBy,
 } from 'firebase/firestore'
@@ -25,8 +24,10 @@ export const getProductsRealtime = (callback) => {
 export const createProduct = async (data) => {
   await addDoc(colRef, {
     ...data,
-    price: Number(data.price) || 0,
-    createdAt: serverTimestamp(),
+    units: Number(data.units) || 1,
+    unitPrice: Number(data.unitPrice) || 0,
+    totalPrice: Number(data.totalPrice) || 0,
+    createdAt: Date.now(),
   })
 }
 

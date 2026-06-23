@@ -11,32 +11,6 @@ import Loader from '../../components/Loader'
 import PublicNavbar from '../../components/PublicNavbar'
 import heroBg from '../../assets/finca/hero.jpg'
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: i * 0.1 },
-  }),
-}
-
-const stagger = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { staggerChildren: 0.06, delayChildren: 0.1 },
-  },
-}
-
-const scaleIn = {
-  hidden: { opacity: 0, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
-  },
-}
-
 function HeroCountdown({ countdown }) {
   const blocks = [
     { label: 'Días', value: countdown.days },
@@ -46,16 +20,13 @@ function HeroCountdown({ countdown }) {
   ]
 
   return (
-    <motion.div
-      variants={stagger}
-      initial="hidden"
-      animate="visible"
-      className="flex items-center justify-center gap-2 sm:gap-3"
-    >
+    <div className="flex items-center justify-center gap-2 sm:gap-3">
       {blocks.map((b, i) => (
         <motion.div
           key={b.label}
-          variants={scaleIn}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: i * 0.08 }}
           className="relative flex flex-col items-center bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] rounded-xl sm:rounded-2xl px-3 sm:px-5 py-3 sm:py-4 min-w-[64px] sm:min-w-[88px]"
         >
           <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums tracking-tight">
@@ -71,13 +42,13 @@ function HeroCountdown({ countdown }) {
           )}
         </motion.div>
       ))}
-    </motion.div>
+    </div>
   )
 }
 
 export default function HomePage() {
   const { event, loading: eventLoading } = useEvent()
-  const { participants, loading: partsLoading, total, paid, totalCollected } = useParticipants()
+  const { participants, loading: partsLoading, total, pagado, totalCollected } = useParticipants()
   const { products, loading: prodsLoading, totalCost } = useProducts()
   const countdown = useCountdown(event?.eventDate)
   const [name, setName] = useState('')
@@ -191,7 +162,7 @@ export default function HomePage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
             {[
               { label: 'Inscritos', value: total, color: 'text-white' },
-              { label: 'Pagados', value: paid, color: 'text-[#34D399]' },
+              { label: 'Pagados', value: pagado, color: 'text-[#34D399]' },
               { label: 'Productos', value: products.length, color: 'text-white' },
               {
                 label: 'Recaudado',
@@ -235,7 +206,7 @@ export default function HomePage() {
             <ProgressBar
               percentage={collectedPercentage}
               label={`$${totalCollected.toLocaleString('es-CO')} recaudado de $${totalCost.toLocaleString('es-CO')}`}
-              sublabel={`${paid} de ${total} participantes han pagado su cuota`}
+              sublabel={`${pagado} de ${total} participantes han pagado su cuota`}
             />
           </motion.div>
         </section>
@@ -284,43 +255,41 @@ export default function HomePage() {
           </p>
         </motion.div>
 
-        <motion.div
-          variants={stagger}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          className="bg-[#121214] border border-[#27272A] rounded-2xl overflow-hidden divide-y divide-[#27272A]"
-        >
+        <div className="bg-[#121214] border border-[#27272A] rounded-2xl overflow-hidden divide-y divide-[#27272A]">
           {participants.length === 0 && (
             <div className="px-6 py-12 text-center">
               <p className="text-sm text-[#52525B]">Aún no hay inscritos. ¡Sé el primero!</p>
             </div>
           )}
-          {participants.map((p, i) => (
-            <motion.div
-              key={p.id}
-              variants={fadeUp}
-              custom={i * 0.03}
-              className="flex items-center justify-between px-5 sm:px-6 py-3.5 hover:bg-white/[0.02] transition-colors"
-            >
-              <div className="flex items-center gap-3">
-                <div className="w-7 h-7 rounded-full bg-[#1A1A1E] border border-[#27272A] flex items-center justify-center">
-                  <span className="text-xs font-medium text-[#71717A]">{String(i + 1).padStart(2, '0')}</span>
-                </div>
-                <span className="text-sm font-medium text-[#E4E4E7]">{p.name}</span>
-              </div>
-              <span
-                className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                  p.paid
-                    ? 'bg-[#10B981]/10 text-[#34D399] border border-[#10B981]/20'
-                    : 'bg-[#27272A] text-[#71717A] border border-[#3F3F46]'
-                }`}
+          {participants.map((p, i) => {
+            const st = p.status || 'pendiente'
+            const badge = {
+              pendiente: 'bg-[#27272A] text-[#71717A] border border-[#3F3F46]',
+              confirmado: 'bg-amber-500/10 text-amber-400 border border-amber-500/20',
+              pagado: 'bg-[#10B981]/10 text-[#34D399] border border-[#10B981]/20',
+            }
+            return (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                layout
+                className="flex items-center justify-between px-5 sm:px-6 py-3.5 hover:bg-white/[0.02] transition-colors"
               >
-                {p.paid ? 'Pagado' : 'Pendiente'}
-              </span>
-            </motion.div>
-          ))}
-        </motion.div>
+                <div className="flex items-center gap-3">
+                  <div className="w-7 h-7 rounded-full bg-[#1A1A1E] border border-[#27272A] flex items-center justify-center">
+                    <span className="text-xs font-medium text-[#71717A]">{String(i + 1).padStart(2, '0')}</span>
+                  </div>
+                  <span className="text-sm font-medium text-[#E4E4E7]">{p.name}</span>
+                </div>
+                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${badge[st] || badge.pendiente}`}>
+                  {st === 'pagado' ? 'Pagado' : st === 'confirmado' ? 'Confirmado' : 'Pendiente'}
+                </span>
+              </motion.div>
+            )
+          })}
+        </div>
       </section>
 
       {/* ===== REGISTRATION ===== */}
@@ -366,7 +335,7 @@ export default function HomePage() {
       {/* ===== FOOTER ===== */}
       <footer className="relative z-10 border-t border-[#27272A]">
         <div className="max-w-7xl mx-auto px-5 py-8 flex items-center justify-between">
-          <p className="text-xs text-[#52525B]">Plan Finca</p>
+          <p className="text-xs text-[#52525B]">© 2026 Neonwaac Inc. All rights reserved.</p>
           <a
             href="/admin/login"
             className="text-xs text-[#52525B] hover:text-[#A1A1AA] transition-colors"

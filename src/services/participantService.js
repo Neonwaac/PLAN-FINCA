@@ -5,7 +5,6 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
-  serverTimestamp,
   query,
   orderBy,
 } from 'firebase/firestore'
@@ -24,8 +23,8 @@ export const getParticipantsRealtime = (callback) => {
 export const createParticipant = async (data) => {
   await addDoc(colRef, {
     ...data,
-    paid: false,
-    createdAt: serverTimestamp(),
+    status: 'pendiente',
+    createdAt: Date.now(),
   })
 }
 

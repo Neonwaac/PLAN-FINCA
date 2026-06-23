@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useProducts } from '../../hooks/useProducts'
 import {
   createProduct,
@@ -10,7 +10,7 @@ import Modal from '../../components/Modal'
 import ConfirmDialog from '../../components/ConfirmDialog'
 import Loader from '../../components/Loader'
 
-const emptyForm = { title: '', description: '', price: '' }
+const emptyForm = { title: '', description: '', units: '1', unitPrice: '' }
 
 export default function ProductsPage() {
   const { products, loading } = useProducts()
@@ -21,6 +21,11 @@ export default function ProductsPage() {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [deleteId, setDeleteId] = useState(null)
+
+  const totalFormPrice = useMemo(
+    () => (Number(form.units) || 1) * (Number(form.unitPrice) || 0),
+    [form.units, form.unitPrice]
+  )
 
   const resetForm = () => {
     setForm(emptyForm)
@@ -36,13 +41,18 @@ export default function ProductsPage() {
 
   const openEdit = (p) => {
     setEditing(p)
-    setForm({ title: p.title, description: p.description || '', price: String(p.price) })
+    setForm({
+      title: p.title,
+      description: p.description || '',
+      units: String(p.units || 1),
+      unitPrice: String(p.unitPrice || 0),
+    })
     setModalOpen(true)
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!form.title.trim() || !form.price) return
+    if (!form.title.trim() || !form.unitPrice) return
 
     setUploading(true)
 
@@ -63,10 +73,15 @@ export default function ProductsPage() {
         })
       }
 
+      const units = Number(form.units) || 1
+      const unitPrice = Number(form.unitPrice) || 0
+
       const data = {
         title: form.title.trim(),
         description: form.description.trim(),
-        price: Number(form.price),
+        units,
+        unitPrice,
+        totalPrice: units * unitPrice,
         imageUrl,
       }
 
@@ -119,57 +134,64 @@ export default function ProductsPage() {
               <tr className="border-b border-[#27272A]">
                 <th className="text-left py-3 px-4 font-medium text-[#71717A]">Imagen</th>
                 <th className="text-left py-3 px-4 font-medium text-[#71717A]">Título</th>
-                <th className="text-left py-3 px-4 font-medium text-[#71717A]">Precio</th>
+                <th className="text-right py-3 px-4 font-medium text-[#71717A]">Unidades</th>
+                <th className="text-right py-3 px-4 font-medium text-[#71717A]">P. Unit</th>
+                <th className="text-right py-3 px-4 font-medium text-[#71717A]">Total</th>
                 <th className="text-right py-3 px-4 font-medium text-[#71717A]">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {products.length === 0 && (
                 <tr>
-                  <td colSpan={4} className="text-center py-12 text-[#52525B]">
+                  <td colSpan={6} className="text-center py-12 text-[#52525B]">
                     No hay productos registrados
                   </td>
                 </tr>
               )}
-              {products.map((p) => (
-                <tr key={p.id} className="border-b border-[#1A1A1E] hover:bg-white/[0.02] transition-colors">
-                  <td className="py-3 px-4">
-                    {p.imageUrl ? (
-                      <img
-                        src={p.imageUrl}
-                        alt={p.title}
-                        className="w-10 h-10 rounded-lg object-cover"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 bg-[#1A1A1E] rounded-lg flex items-center justify-center">
-                        <svg className="w-5 h-5 text-[#3F3F46]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+              {products.map((p) => {
+                const units = Number(p.units) || 1
+                const unitPrice = Number(p.unitPrice) || 0
+                const totalPrice = Number(p.totalPrice) || (units * unitPrice)
+                return (
+                  <tr key={p.id} className="border-b border-[#1A1A1E] hover:bg-white/[0.02] transition-colors">
+                    <td className="py-3 px-4">
+                      {p.imageUrl ? (
+                        <img
+                          src={p.imageUrl}
+                          alt={p.title}
+                          className="w-10 h-10 rounded-lg object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-[#1A1A1E] rounded-lg flex items-center justify-center">
+                          <svg className="w-5 h-5 text-[#3F3F46]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                      )}
+                    </td>
+                    <td className="py-3 px-4 font-medium text-[#E4E4E7]">{p.title}</td>
+                    <td className="py-3 px-4 text-right text-[#A1A1AA]">{units}</td>
+                    <td className="py-3 px-4 text-right text-[#A1A1AA]">${unitPrice.toLocaleString('es-CO')}</td>
+                    <td className="py-3 px-4 text-right text-[#34D399] font-medium">${totalPrice.toLocaleString('es-CO')}</td>
+                    <td className="py-3 px-4 text-right">
+                      <div className="flex gap-2 justify-end">
+                        <button
+                          onClick={() => openEdit(p)}
+                          className="px-3 py-1 rounded-lg text-xs font-medium bg-[#10B981]/10 text-[#34D399] hover:bg-[#10B981]/20 border border-[#10B981]/20 transition-all duration-200 cursor-pointer"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => setDeleteId(p.id)}
+                          className="px-3 py-1 rounded-lg text-xs font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all duration-200 cursor-pointer"
+                        >
+                          Eliminar
+                        </button>
                       </div>
-                    )}
-                  </td>
-                  <td className="py-3 px-4 font-medium text-[#E4E4E7]">{p.title}</td>
-                  <td className="py-3 px-4 text-[#34D399] font-medium">
-                    ${Number(p.price).toLocaleString('es-CO')}
-                  </td>
-                  <td className="py-3 px-4 text-right">
-                    <div className="flex gap-2 justify-end">
-                      <button
-                        onClick={() => openEdit(p)}
-                        className="px-3 py-1 rounded-lg text-xs font-medium bg-[#10B981]/10 text-[#34D399] hover:bg-[#10B981]/20 border border-[#10B981]/20 transition-all duration-200 cursor-pointer"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => setDeleteId(p.id)}
-                        className="px-3 py-1 rounded-lg text-xs font-medium bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition-all duration-200 cursor-pointer"
-                      >
-                        Eliminar
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -200,19 +222,43 @@ export default function ProductsPage() {
               className="w-full px-4 py-2.5 bg-[#1A1A1E] border border-[#27272A] rounded-xl text-sm text-white placeholder-[#52525B] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30 focus:border-[#10B981] transition-all duration-200 resize-none"
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-[#A1A1AA] mb-1.5">
-              Precio
-            </label>
-            <input
-              type="number"
-              value={form.price}
-              onChange={(e) => setForm({ ...form, price: e.target.value })}
-              required
-              min={0}
-              className="w-full px-4 py-2.5 bg-[#1A1A1E] border border-[#27272A] rounded-xl text-sm text-white placeholder-[#52525B] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30 focus:border-[#10B981] transition-all duration-200"
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-[#A1A1AA] mb-1.5">
+                Unidades
+              </label>
+              <input
+                type="number"
+                value={form.units}
+                onChange={(e) => setForm({ ...form, units: e.target.value })}
+                min={1}
+                className="w-full px-4 py-2.5 bg-[#1A1A1E] border border-[#27272A] rounded-xl text-sm text-white placeholder-[#52525B] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30 focus:border-[#10B981] transition-all duration-200"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-[#A1A1AA] mb-1.5">
+                Precio unitario
+              </label>
+              <input
+                type="number"
+                value={form.unitPrice}
+                onChange={(e) => setForm({ ...form, unitPrice: e.target.value })}
+                required
+                min={0}
+                className="w-full px-4 py-2.5 bg-[#1A1A1E] border border-[#27272A] rounded-xl text-sm text-white placeholder-[#52525B] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30 focus:border-[#10B981] transition-all duration-200"
+              />
+            </div>
           </div>
+
+          {Number(form.units) > 0 && Number(form.unitPrice) > 0 && (
+            <div className="bg-[#1A1A1E] border border-[#27272A] rounded-xl px-4 py-3 flex items-center justify-between">
+              <span className="text-sm text-[#A1A1AA]">Total calculado</span>
+              <span className="text-lg font-bold text-[#34D399]">
+                ${totalFormPrice.toLocaleString('es-CO')}
+              </span>
+            </div>
+          )}
+
           <div>
             <label className="block text-sm font-medium text-[#A1A1AA] mb-1.5">
               Imagen

@@ -15,8 +15,10 @@ export function useParticipants() {
   }, [])
 
   const total = participants.length
-  const paid = participants.filter((p) => p.paid).length
-  const totalCollected = paid * PAYMENT_PER_PERSON
+  const pagado = participants.filter((p) => p.status === 'pagado').length
+  const confirmado = participants.filter((p) => p.status === 'confirmado').length
+  const pendiente = participants.filter((p) => p.status === 'pendiente' || !p.status).length
+  const totalCollected = pagado * PAYMENT_PER_PERSON
 
-  return { participants, loading, total, paid, totalCollected }
+  return { participants, loading, total, pagado, confirmado, pendiente, totalCollected }
 }

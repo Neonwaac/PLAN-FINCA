@@ -4,7 +4,7 @@ import StatsCard from '../../components/StatsCard'
 import Loader from '../../components/Loader'
 
 export default function DashboardPage() {
-  const { participants, loading: pl, total, paid, totalCollected } = useParticipants()
+  const { participants, loading: pl, total, pagado, totalCollected } = useParticipants()
   const { products, loading: prl, totalCost } = useProducts()
 
   const collectedPercentage = totalCost > 0
@@ -42,7 +42,7 @@ export default function DashboardPage() {
           />
         </div>
         <p className="text-xs text-[#52525B] mt-2">
-          ${totalCollected.toLocaleString('es-CO')} recaudado de ${totalCost.toLocaleString('es-CO')} necesarios ({paid} de {total} pagaron)
+          ${totalCollected.toLocaleString('es-CO')} recaudado de ${totalCost.toLocaleString('es-CO')} necesarios ({pagado} de {total} pagaron)
         </p>
       </div>
 
@@ -53,14 +53,17 @@ export default function DashboardPage() {
             <p className="text-sm text-[#52525B]">Sin participantes</p>
           ) : (
             <ul className="divide-y divide-[#27272A]">
-              {participants.slice(-5).reverse().map((p) => (
-                <li key={p.id} className="flex justify-between py-2.5">
-                  <span className="text-sm text-[#E4E4E7]">{p.name}</span>
-                  <span className={`text-xs font-medium ${p.paid ? 'text-[#34D399]' : 'text-[#52525B]'}`}>
-                    {p.paid ? 'Pagado' : 'Pendiente'}
-                  </span>
-                </li>
-              ))}
+              {participants.slice(-5).reverse().map((p) => {
+                const st = p.status || 'pendiente'
+                const color = st === 'pagado' ? 'text-[#34D399]' : st === 'confirmado' ? 'text-amber-400' : 'text-[#52525B]'
+                const label = st === 'pagado' ? 'Pagado' : st === 'confirmado' ? 'Confirmado' : 'Pendiente'
+                return (
+                  <li key={p.id} className="flex justify-between py-2.5">
+                    <span className="text-sm text-[#E4E4E7]">{p.name}</span>
+                    <span className={`text-xs font-medium ${color}`}>{label}</span>
+                  </li>
+                )
+              })}
             </ul>
           )}
         </div>

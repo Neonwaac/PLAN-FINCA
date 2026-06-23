@@ -9,9 +9,9 @@ export default function ParticipantsPage() {
   const { participants, loading } = useParticipants()
   const [deleteId, setDeleteId] = useState(null)
 
-  const handleToggle = async (id, paid) => {
+  const handleToggle = async (id, status) => {
     try {
-      await updateParticipant(id, { paid })
+      await updateParticipant(id, { status })
     } catch {
       alert('Error al actualizar')
     }

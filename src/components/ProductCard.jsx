@@ -1,6 +1,10 @@
 import { motion } from 'framer-motion'
 
 export default function ProductCard({ product, index = 0 }) {
+  const units = Number(product.units) || 1
+  const unitPrice = Number(product.unitPrice) || 0
+  const totalPrice = Number(product.totalPrice) || (units * unitPrice)
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 24 }}
@@ -29,9 +33,12 @@ export default function ProductCard({ product, index = 0 }) {
         {product.description && (
           <p className="text-xs text-[#71717A] leading-relaxed line-clamp-2">{product.description}</p>
         )}
-        <p className="text-base font-semibold text-[#34D399] tracking-tight">
-          ${Number(product.price).toLocaleString('es-CO')}
-        </p>
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="text-xs text-[#71717A]">{units} × ${unitPrice.toLocaleString('es-CO')}</span>
+          <p className="text-base font-semibold text-[#34D399] tracking-tight">
+            ${totalPrice.toLocaleString('es-CO')}
+          </p>
+        </div>
       </div>
     </motion.div>
   )

@@ -13,7 +13,7 @@ export function useProducts() {
     return unsub
   }, [])
 
-  const totalCost = products.reduce((acc, p) => acc + (Number(p.price) || 0), 0)
+  const totalCost = products.reduce((acc, p) => acc + (Number(p.totalPrice) || Number(p.units) * Number(p.unitPrice) || 0), 0)
 
   return { products, loading, totalCost }
 }
