@@ -1,0 +1,1 @@
+export const PAYMENT_PER_PERSON = 100000
