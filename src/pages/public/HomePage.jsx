@@ -230,7 +230,7 @@ export default function HomePage() {
               ¿Qué estás pagando con tu aporte?
             </h2>
             <p className="text-[#71717A] mt-2 text-sm">
-              {products.length} {products.length === 1 ? 'producto' : 'productos'} para la finca y la finca como tal.
+              {products.length} {products.length === 1 ? 'producto' : 'productos'} productos contando a la finca :D
             </p>
           </motion.div>
 
