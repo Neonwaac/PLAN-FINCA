@@ -9,6 +9,7 @@ import ProductCard from '../../components/ProductCard'
 import ProgressBar from '../../components/ProgressBar'
 import Loader from '../../components/Loader'
 import PublicNavbar from '../../components/PublicNavbar'
+import heroBg from '../../assets/finca/hero.jpg'
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -117,7 +118,7 @@ export default function HomePage() {
           <div
             className="absolute inset-0 bg-[length:cover] bg-center bg-no-repeat scale-105"
             style={{
-              backgroundImage: `url('/src/assets/finca/hero.jpg')`,
+              backgroundImage: `url(${heroBg})`,
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[#09090B]/70 via-[#09090B]/50 to-[#09090B]" />
