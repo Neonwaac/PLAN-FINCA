@@ -32,12 +32,12 @@ export default function ParticipantsPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">
+        <h1 className="text-2xl font-bold text-[#FAFAFA] tracking-tight">
           Participantes ({participants.length})
         </h1>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+      <div className="bg-[#121214] border border-[#27272A] rounded-2xl overflow-hidden">
         <ParticipantTable
           participants={participants}
           onToggle={handleToggle}

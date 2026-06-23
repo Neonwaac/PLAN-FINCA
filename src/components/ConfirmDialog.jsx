@@ -3,11 +3,11 @@ import Modal from './Modal'
 export default function ConfirmDialog({ open, onClose, onConfirm, message }) {
   return (
     <Modal open={open} onClose={onClose} title="Confirmar">
-      <p className="text-gray-600 mb-6">{message}</p>
+      <p className="text-[#A1A1AA] mb-6 text-sm">{message}</p>
       <div className="flex gap-3 justify-end">
         <button
           onClick={onClose}
-          className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors cursor-pointer"
+          className="px-4 py-2 text-sm font-medium text-[#A1A1AA] bg-[#1A1A1E] border border-[#27272A] rounded-xl hover:bg-[#222226] transition-all duration-200 cursor-pointer"
         >
           Cancelar
         </button>
@@ -16,7 +16,7 @@ export default function ConfirmDialog({ open, onClose, onConfirm, message }) {
             onConfirm()
             onClose()
           }}
-          className="px-4 py-2 text-sm font-medium text-white bg-red-500 rounded-lg hover:bg-red-600 transition-colors cursor-pointer"
+          className="px-4 py-2 text-sm font-medium text-white bg-red-500/80 rounded-xl hover:bg-red-500 transition-all duration-200 cursor-pointer"
         >
           Eliminar
         </button>

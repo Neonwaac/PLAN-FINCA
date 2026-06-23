@@ -20,12 +20,12 @@ export default function Navbar() {
   }
 
   return (
-    <nav className="bg-white shadow-sm border-b border-gray-200">
+    <nav className="bg-[#121214]/80 backdrop-blur-xl border-b border-[#27272A] sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-1">
-            <Link to="/" className="text-emerald-600 font-bold text-lg mr-6">
-              🌿 Plan Finca
+            <Link to="/" className="text-[#10B981] font-bold text-lg mr-6 tracking-tight">
+              Plan Finca
             </Link>
             <div className="hidden md:flex gap-1">
               {links.map((l) => (
@@ -34,8 +34,8 @@ export default function Navbar() {
                   to={l.to}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
                     pathname === l.to
-                      ? 'bg-emerald-50 text-emerald-700'
-                      : 'text-gray-600 hover:bg-gray-100'
+                      ? 'bg-[#10B981]/10 text-[#34D399]'
+                      : 'text-[#A1A1AA] hover:text-white hover:bg-white/[0.06]'
                   }`}
                 >
                   {l.label}
@@ -45,10 +45,10 @@ export default function Navbar() {
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-sm text-gray-500 hidden sm:block">{user?.email}</span>
+            <span className="text-sm text-[#71717A] hidden sm:block">{user?.email}</span>
             <button
               onClick={handleLogout}
-              className="px-3 py-1.5 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-sm bg-red-500/10 text-red-400 rounded-lg hover:bg-red-500/20 transition-colors cursor-pointer"
             >
               Cerrar sesión
             </button>
@@ -62,8 +62,8 @@ export default function Navbar() {
               to={l.to}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors ${
                 pathname === l.to
-                  ? 'bg-emerald-50 text-emerald-700'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-[#10B981]/10 text-[#34D399]'
+                  : 'text-[#A1A1AA] hover:text-white hover:bg-white/[0.06]'
               }`}
             >
               {l.label}

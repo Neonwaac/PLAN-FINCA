@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate, Navigate, Link } from 'react-router-dom'
 import { login } from '../../services/authService'
 import { useAuth } from '../../hooks/useAuth'
 
@@ -31,26 +31,27 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#09090B] flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <p className="text-3xl mb-1">🌿</p>
-          <h1 className="text-xl font-bold text-gray-800">Plan Finca</h1>
-          <p className="text-sm text-gray-500 mt-1">Inicia sesión como administrador</p>
+          <Link to="/" className="text-xl font-bold text-[#10B981] tracking-tight">
+            Plan Finca
+          </Link>
+          <p className="text-sm text-[#71717A] mt-2">Inicia sesión como administrador</p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4"
+          className="bg-[#121214] border border-[#27272A] rounded-2xl p-6 space-y-4"
         >
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg">
+            <div className="bg-red-500/10 text-red-400 text-sm p-3 rounded-xl border border-red-500/20">
               {error}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#A1A1AA] mb-1.5">
               Correo electrónico
             </label>
             <input
@@ -58,13 +59,13 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
+              className="w-full px-4 py-2.5 bg-[#1A1A1E] border border-[#27272A] rounded-xl text-sm text-white placeholder-[#52525B] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30 focus:border-[#10B981] transition-all duration-200"
               placeholder="admin@correo.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-[#A1A1AA] mb-1.5">
               Contraseña
             </label>
             <input
@@ -72,7 +73,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 text-sm"
+              className="w-full px-4 py-2.5 bg-[#1A1A1E] border border-[#27272A] rounded-xl text-sm text-white placeholder-[#52525B] focus:outline-none focus:ring-2 focus:ring-[#10B981]/30 focus:border-[#10B981] transition-all duration-200"
               placeholder="••••••••"
             />
           </div>
@@ -80,10 +81,17 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={submitting}
-            className="w-full py-2.5 bg-emerald-500 text-white font-medium rounded-lg hover:bg-emerald-600 disabled:opacity-50 transition-colors text-sm cursor-pointer"
+            className="w-full py-2.5 bg-[#10B981] text-white font-medium rounded-xl hover:bg-[#059669] disabled:opacity-50 transition-all duration-200 text-sm cursor-pointer"
           >
             {submitting ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
+
+          <Link
+            to="/"
+            className="block text-center text-sm text-[#52525B] hover:text-[#A1A1AA] transition-colors"
+          >
+            Volver al inicio
+          </Link>
         </form>
       </div>
     </div>

@@ -15,50 +15,48 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-800">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-[#FAFAFA] tracking-tight">Dashboard</h1>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatsCard title="Total participantes" value={total} color="blue" />
+        <StatsCard title="Total participantes" value={total} />
         <StatsCard
           title="Recaudado"
           value={`$${totalCollected.toLocaleString('es-CO')}`}
-          color="emerald"
         />
-        <StatsCard title="Total productos" value={products.length} color="purple" />
+        <StatsCard title="Total productos" value={products.length} />
         <StatsCard
           title="Costo total"
           value={`$${totalCost.toLocaleString('es-CO')}`}
-          color="amber"
         />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-        <div className="flex justify-between text-sm text-gray-600 mb-2">
+      <div className="bg-[#121214] border border-[#27272A] rounded-2xl p-5">
+        <div className="flex justify-between text-sm text-[#A1A1AA] mb-3">
           <span>Recaudado vs Costo total</span>
-          <span className="font-semibold">{collectedPercentage}%</span>
+          <span className="font-semibold text-[#34D399]">{collectedPercentage}%</span>
         </div>
-        <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-[#1A1A1E] rounded-full overflow-hidden">
           <div
-            className="h-full bg-emerald-500 rounded-full transition-all duration-500"
+            className="h-full bg-gradient-to-r from-[#059669] to-[#10B981] rounded-full transition-all duration-700"
             style={{ width: `${collectedPercentage}%` }}
           />
         </div>
-        <p className="text-xs text-gray-400 mt-2">
+        <p className="text-xs text-[#52525B] mt-2">
           ${totalCollected.toLocaleString('es-CO')} recaudado de ${totalCost.toLocaleString('es-CO')} necesarios ({paid} de {total} pagaron)
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <h2 className="font-semibold text-gray-800 mb-3">Últimos participantes</h2>
+        <div className="bg-[#121214] border border-[#27272A] rounded-2xl p-5">
+          <h2 className="font-semibold text-[#FAFAFA] mb-3 text-sm">Últimos participantes</h2>
           {participants.length === 0 ? (
-            <p className="text-sm text-gray-400">Sin participantes</p>
+            <p className="text-sm text-[#52525B]">Sin participantes</p>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-[#27272A]">
               {participants.slice(-5).reverse().map((p) => (
-                <li key={p.id} className="flex justify-between py-2">
-                  <span className="text-sm text-gray-700">{p.name}</span>
-                  <span className={`text-xs font-medium ${p.paid ? 'text-emerald-600' : 'text-gray-400'}`}>
+                <li key={p.id} className="flex justify-between py-2.5">
+                  <span className="text-sm text-[#E4E4E7]">{p.name}</span>
+                  <span className={`text-xs font-medium ${p.paid ? 'text-[#34D399]' : 'text-[#52525B]'}`}>
                     {p.paid ? 'Pagado' : 'Pendiente'}
                   </span>
                 </li>
@@ -67,16 +65,16 @@ export default function DashboardPage() {
           )}
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
-          <h2 className="font-semibold text-gray-800 mb-3">Últimos productos</h2>
+        <div className="bg-[#121214] border border-[#27272A] rounded-2xl p-5">
+          <h2 className="font-semibold text-[#FAFAFA] mb-3 text-sm">Últimos productos</h2>
           {products.length === 0 ? (
-            <p className="text-sm text-gray-400">Sin productos</p>
+            <p className="text-sm text-[#52525B]">Sin productos</p>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="divide-y divide-[#27272A]">
               {products.slice(-5).reverse().map((p) => (
-                <li key={p.id} className="flex justify-between py-2">
-                  <span className="text-sm text-gray-700">{p.title}</span>
-                  <span className="text-sm font-medium text-amber-600">
+                <li key={p.id} className="flex justify-between py-2.5">
+                  <span className="text-sm text-[#E4E4E7]">{p.title}</span>
+                  <span className="text-sm font-medium text-[#10B981]">
                     ${Number(p.price).toLocaleString('es-CO')}
                   </span>
                 </li>
