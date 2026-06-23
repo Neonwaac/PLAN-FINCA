@@ -163,7 +163,11 @@ export default function HomePage() {
             {[
               { label: 'Inscritos', value: total, color: 'text-white' },
               { label: 'Pagados', value: pagado, color: 'text-[#34D399]' },
-              { label: 'Productos', value: products.length, color: 'text-white' },
+              {
+                label: 'Costo total',
+                value: `$${totalCost.toLocaleString('es-CO')}`,
+                color: 'text-[#FAFAFA]',
+              },
               {
                 label: 'Recaudado',
                 value: `$${totalCollected.toLocaleString('es-CO')}`,
